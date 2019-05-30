@@ -16,10 +16,25 @@
 #include <exception>
 using namespace std;
 
+// 超简洁写法，置顶========================================推荐，推荐==============================
+BinaryTreeNode* Construct(int* preorder, int startPre, int endPre, int* inorder, int startIn, int endIn) {
+    if(startPre > endPre || startIn > endIn)
+        return nullptr;
+    BinaryTreeNode* root = new BinaryTreeNode(preorder[startPre]);
+    for(int i = startIn; i <= endIn; i++){
+        if(inorder[i] == preorder[startPre]) {
+            root->m_pLeft = Construct(preorder, startPre + 1, startPre + i - startIn, inorder, startIn, i - 1);
+            root->m_pRight = Construct(preorder, startPre + i - startIn + 1, endPre, inorder, i + 1, endIn);
+            break;
+        }
+    }
+    return root;
+}
 
-//
-// NowCoder提交格式
-//
+BinaryTreeNode* Construct(int* preorder, int* inorder, int length) {
+    BinaryTreeNode* root = Construct(preorder, 0, length - 1, inorder, 0, length - 1);
+    return root;
+}
 
 class Solution {
 public:
